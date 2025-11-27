@@ -11,6 +11,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "tipo"       // ← Nombre de la clave que aparecerá en el JSON
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Revision.class, name = "revision"),   // tipo = "revision"
+        @JsonSubTypes.Type(value = Mecanico.class, name = "mecanico")    // tipo = "mecanico"
+})
 
 public abstract class Trabajo {
     public static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -18,7 +27,9 @@ public abstract class Trabajo {
 
     private Cliente cliente;
     private Vehiculo vehiculo;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaInicio;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFin;
     private int horas;
 
@@ -126,19 +137,22 @@ public abstract class Trabajo {
         setFechaFin(fechaFin);
     }
 
-
+    @JsonIgnore
     public float getPrecio() {
         return getPrecioFijo() + getPrecioEspecifico();
     }
 
+    @JsonIgnore
     private float getPrecioFijo() {
         return (estaCerrado()) ? FACTOR_DIA * getDias() : 0;
     }
 
+    @JsonIgnore
     private float getDias() {
         return (estaCerrado()) ? (int) ChronoUnit.DAYS.between(fechaInicio, fechaFin) : 0;
     }
 
+    @JsonIgnore
     public abstract float getPrecioEspecifico();
 
     @Override
