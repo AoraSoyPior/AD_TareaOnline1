@@ -21,7 +21,7 @@ public class Clientes implements IClientes {
     private static ObjectMapper mapper;
     private static Clientes instancia;
 
-    private Clientes(){ mapper = new ObjectMapper().registerModule(new JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); }
+    private Clientes(){ mapper = new ObjectMapper(); }
 
     static Clientes getInstancia(){
         if (instancia == null){
