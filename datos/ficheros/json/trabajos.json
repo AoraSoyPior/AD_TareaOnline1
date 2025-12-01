@@ -1,0 +1,32 @@
+[ {
+  "tipo" : "Mecanico",
+  "cliente" : {
+    "nombre" : "Bob Esponja",
+    "dni" : "77248816G",
+    "telefono" : "644612770"
+  },
+  "vehiculo" : {
+    "marca" : "Seat",
+    "modelo" : "Ibiza",
+    "matricula" : "2993CYF"
+  },
+  "fechaInicio" : "2025-11-29",
+  "fechaFin" : "2025-12-01",
+  "horas" : 50,
+  "precioMaterial" : 25.0
+}, {
+  "tipo" : "Revision",
+  "cliente" : {
+    "nombre" : "Patricio Estrella",
+    "dni" : "31204072H",
+    "telefono" : "123456789"
+  },
+  "vehiculo" : {
+    "marca" : "Citroen",
+    "modelo" : "C15",
+    "matricula" : "2991CRT"
+  },
+  "fechaInicio" : "2025-12-01",
+  "fechaFin" : null,
+  "horas" : 0
+} ]

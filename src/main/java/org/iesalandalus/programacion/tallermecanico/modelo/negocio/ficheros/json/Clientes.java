@@ -36,7 +36,7 @@ public class Clientes implements IClientes {
     @Override
     public void terminar() {}
 
-    private List<Cliente> leer() {
+    public List<Cliente> leer() {
         try {
             File fichero = new File(FICHERO_CLIENTES);
             if (!fichero.exists()) {
@@ -48,7 +48,7 @@ public class Clientes implements IClientes {
         }
     }
 
-    private void escribir(List<Cliente> clientes) throws TallerMecanicoExcepcion {
+    public void escribir(List<Cliente> clientes) throws TallerMecanicoExcepcion {
         try {
             File fichero = new File(FICHERO_CLIENTES);
             fichero.getParentFile().mkdirs();

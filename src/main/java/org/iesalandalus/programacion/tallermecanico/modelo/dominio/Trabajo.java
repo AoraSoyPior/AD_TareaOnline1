@@ -1,9 +1,6 @@
 package org.iesalandalus.programacion.tallermecanico.modelo.dominio;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.*;
 import org.iesalandalus.programacion.tallermecanico.modelo.TallerMecanicoExcepcion;
 
 import java.time.LocalDate;
@@ -14,11 +11,11 @@ import java.util.Objects;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "tipo"       // ← Nombre de la clave que aparecerá en el JSON
+        property = "tipo"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = Revision.class, name = "revision"),   // tipo = "revision"
-        @JsonSubTypes.Type(value = Mecanico.class, name = "mecanico")    // tipo = "mecanico"
+        @JsonSubTypes.Type(value = Revision.class, name = "Revision"),
+        @JsonSubTypes.Type(value = Mecanico.class, name = "Mecanico")
 })
 
 public abstract class Trabajo {
@@ -101,6 +98,7 @@ public abstract class Trabajo {
         return fechaFin;
     }
 
+    @JsonSetter(nulls = Nulls.SKIP)
     private void setFechaFin(LocalDate fechaFin) {
         Objects.requireNonNull(fechaFin, "La fecha de fin no puede ser nula.");
         if (fechaFin.isBefore(fechaInicio)) {

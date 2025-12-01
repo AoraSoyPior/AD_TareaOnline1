@@ -17,6 +17,8 @@ public class Trabajos implements ITrabajos {
 
     private static final String FICHERO_TRABAJOS = "datos/ficheros/json/trabajos.json";
 
+    private static final TypeReference<List<Trabajo>> TYPE_LIST_TRABAJO = new TypeReference<>() {};
+
     private static Trabajos instancia;
 
     private final ObjectMapper mapper;
@@ -36,31 +38,31 @@ public class Trabajos implements ITrabajos {
 
     @Override
     public void comenzar() {
-        // No hace falta cargar nada al inicio
+        //No hace falta usar este metodo en JSON
     }
 
     @Override
     public void terminar() {
-        // No hace falta guardar nada al final
+        //No hace falta usar este metodo en JSON
     }
 
-    private List<Trabajo> leer() {
+    public List<Trabajo> leer() {
         try {
             File fichero = new File(FICHERO_TRABAJOS);
             if (!fichero.exists()) {
                 return new ArrayList<>();
             }
-            return mapper.readValue(fichero, new TypeReference<List<Trabajo>>() {});
+            return mapper.readValue(fichero, TYPE_LIST_TRABAJO);
         } catch (IOException e) {
             throw new RuntimeException("Error leyendo trabajos.json: " + e.getMessage(), e);
         }
     }
 
-    private void escribir(List<Trabajo> trabajos) {
+    public void escribir(List<Trabajo> trabajos) {
         try {
             File fichero = new File(FICHERO_TRABAJOS);
             fichero.getParentFile().mkdirs();
-            mapper.writerWithDefaultPrettyPrinter().writeValue(fichero, trabajos);
+            mapper.writerFor(TYPE_LIST_TRABAJO).withDefaultPrettyPrinter().writeValue(fichero, trabajos);
         } catch (IOException e) {
             throw new RuntimeException("Error escribiendo trabajos.json: " + e.getMessage(), e);
         }
@@ -121,27 +123,8 @@ public class Trabajos implements ITrabajos {
     public void insertar(Trabajo trabajo) throws TallerMecanicoExcepcion {
         Objects.requireNonNull(trabajo, "No se puede insertar un trabajo nulo.");
         List<Trabajo> trabajos = leer();
-        comprobarTrabajo(trabajo.getCliente(), trabajo.getVehiculo(), trabajo.getFechaInicio(), trabajos);
         trabajos.add(trabajo);
         escribir(trabajos);
-    }
-
-    private void comprobarTrabajo(Cliente cliente, Vehiculo vehiculo, LocalDate fechaInicio, List<Trabajo> trabajos) throws TallerMecanicoExcepcion {
-        for (Trabajo trabajo : trabajos) {
-            if (!trabajo.estaCerrado()) {
-                if (trabajo.getCliente().equals(cliente)) {
-                    throw new TallerMecanicoExcepcion("El cliente tiene otro trabajo en curso.");
-                } else if (trabajo.getVehiculo().equals(vehiculo)) {
-                    throw new TallerMecanicoExcepcion("El vehículo está actualmente en el taller.");
-                }
-            } else {
-                if (trabajo.getCliente().equals(cliente) && !fechaInicio.isAfter(trabajo.getFechaFin())) {
-                    throw new TallerMecanicoExcepcion("El cliente tiene otro trabajo posterior.");
-                } else if (trabajo.getVehiculo().equals(vehiculo) && !fechaInicio.isAfter(trabajo.getFechaFin())) {
-                    throw new TallerMecanicoExcepcion("El vehículo tiene otro trabajo posterior.");
-                }
-            }
-        }
     }
 
     @Override

@@ -38,7 +38,7 @@ public class Vehiculos implements IVehiculos {
     @Override
     public void terminar() {}
 
-    private List<Vehiculo> leer() {
+    public List<Vehiculo> leer() {
         try {
             File fichero = new File(FICHERO_VEHICULOS);
             if (!fichero.exists()) {
@@ -50,7 +50,7 @@ public class Vehiculos implements IVehiculos {
         }
     }
 
-    private void escribir(List<Vehiculo> vehiculos) {
+    public void escribir(List<Vehiculo> vehiculos) {
         try {
             File fichero = new File(FICHERO_VEHICULOS);
             fichero.getParentFile().mkdirs();
